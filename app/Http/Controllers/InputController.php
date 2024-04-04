@@ -17,6 +17,9 @@ class InputController extends Controller
 
     public function index(InputRequest $request): InputResponse
     {
+        $time = $request->getTime();
+        $diff = $request->getDiff();
+        $this->connection->insert('INSERT INTO events (time, diff) VALUES (:time, :diff)', ['time' => $time, 'diff' => $diff]);
         $object = $this->connection->selectOne('SELECT 2+:value AS a', ['value' => $request->getTime()]);
         return new InputResponse($object?->a === $request->getTime() + 2);
     }
